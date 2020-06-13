@@ -1,21 +1,26 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
+const config = require("config");
 
 const app = express();
 
-const items = require("./Routes/api/Items");
-
 app.use(express.json());
 
-const db = require("./config/keys").mongoURI;
+const db = config.get("mongoURI");
 
 mongoose
-  .connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(db, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
   .then(() => console.log("connected to mongodb"));
 
 //use routes
-app.use("/api/items", items);
+app.use("/api/items", require("./Routes/api/Items"));
+app.use("/api/users", require("./Routes/api/Users"));
+app.use("/api/auth", require("./Routes/api/Auth"));
 
 //heroku
 //serve static assets if in production

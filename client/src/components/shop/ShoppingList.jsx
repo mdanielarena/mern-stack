@@ -23,14 +23,18 @@ export class ShoppingList extends Component {
             {items.map(({ _id, name }) => (
               <CSSTransition key={_id} timeout={500} classNames="fade">
                 <ListGroupItem>
-                  <Button
-                    className="remove-btn"
-                    color="danger"
-                    size="sm"
-                    onClick={this.deleteItem.bind(this, _id)}
-                  >
-                    Delete
-                  </Button>{" "}
+                  {this.props.isAuthenticated ? (
+                    <Button
+                      className="remove-btn"
+                      color="danger"
+                      size="sm"
+                      onClick={this.deleteItem.bind(this, _id)}
+                    >
+                      Delete
+                    </Button>
+                  ) : (
+                    ""
+                  )}{" "}
                   {name}
                 </ListGroupItem>
               </CSSTransition>
@@ -42,18 +46,16 @@ export class ShoppingList extends Component {
   }
 }
 
-const btnStyle = {
-  marginBottom: "2rem",
-};
-
 ShoppingList.propTypes = {
   getItems: PropTypes.func.isRequired,
   items: PropTypes.object.isRequired,
+  isAuthenticated: PropTypes.bool,
 };
 
 const gawingProps = (state) => ({
   items: state.items,
   tae: "tae",
+  isAuthenticated: state.auth.isAuthenticated,
 });
 
 export default connect(gawingProps, { getItems, deleteItems })(ShoppingList);

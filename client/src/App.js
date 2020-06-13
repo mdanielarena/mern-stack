@@ -10,7 +10,12 @@ import MyNavbar from "./components/layouts/Navbar";
 import ShoppingList from "./components/shop/ShoppingList";
 import AddModal from "./components/shop/AddModal";
 
+import { loadUser } from "./redux/actions/auth";
+
 export class App extends Component {
+  componentDidMount() {
+    store.dispatch(loadUser());
+  }
   render() {
     return (
       <Provider store={store}>

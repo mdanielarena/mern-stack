@@ -29,15 +29,20 @@ export class AddModal extends Component {
     };
 
     this.props.addItems(newItem);
-    this.state.modal = false;
+    this.toggle();
   }
 
   render() {
     return (
       <div>
-        <Button color="dark" style={btnStyle} onClick={this.toggle}>
-          Add Item
-        </Button>
+        {this.props.isAuthenticated ? (
+          <Button color="dark" style={btnStyle} onClick={this.toggle}>
+            Add Item
+          </Button>
+        ) : (
+          <h4 className="mb-3 ml-4">Please log in to manage items</h4>
+        )}
+
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>Add To Shopping List</ModalHeader>
           <ModalBody>
@@ -66,6 +71,7 @@ export class AddModal extends Component {
 AddModal.propTypes = {
   addItems: PropTypes.func.isRequired,
   items: PropTypes.object.isRequired,
+  isAuthenticated: PropTypes.bool,
 };
 
 const btnStyle = {
@@ -79,6 +85,7 @@ const btnFormStyle = {
 const gawingProps = (state) => ({
   items: state.items,
   tae: "tae",
+  isAuthenticated: state.auth.isAuthenticated,
 });
 
 export default connect(gawingProps, { getItems, addItems })(AddModal);
